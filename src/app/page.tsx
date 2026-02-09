@@ -1,13 +1,17 @@
+'use client';
 import { Button } from "@/components/ui/button";
-import { caller } from "@/trpc/server";
+import { useTRPC } from "@/trpc/client";
+import { useQuery } from "@tanstack/react-query";
 
-export default async function Home() {
-const users = await caller.getUsers();
+
+export default function Home() {
+  const trpc = useTRPC();
+  const { data: users } = useQuery(trpc.getUsers.queryOptions())
 
   return (
     <div className="flex items-center justify-center min-h-screen min-w-screen">
       <Button>
-        Total Users: {users.length}
+        Total Users: {users?.length ?? "0"}
       </Button>
     </div>
   );
